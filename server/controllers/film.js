@@ -19,10 +19,10 @@ exports.getFilmById = async (req, res) => {
         const film = await Film.findById(req.params.id);
         
         if(film == null){
-            return res.status(404).json({message: 'Product not found'});
+            return res.status(404).json({message: 'Film not found'});
         }
 
-        res.json(product);
+        res.json(film);
 
     } catch(err){
         res.status(500).json({message: err.messasge});
@@ -43,5 +43,57 @@ exports.createFilm = async (req, res) => {
         res.status(201).json(newFilm);
     } catch(err){
         res.status(400).json({message: err.message});
+    }
+}
+
+
+// PUT /api/films/:id
+exports.updateFilm = async (req, res) => {
+    try {
+        const film  = await Film.findById(req.params.id);
+
+        if(film == null){
+            return res.status(404).json({message: 'Film not found'});
+        }
+
+        if(req.body.name != null){
+            film.name = req.body.name;
+        }
+
+        if(req.body.released != null){
+            film.released = req.body.released;
+        }
+
+        if(req.body.genre != null){
+            film.genre = req.body.genre;
+        }
+
+        if(req.body.stars != null){
+            film.stars = req.body.stars;
+        }
+
+        const updateFilm = await film.save();
+        
+        res.json(updateFilm);
+    }
+    catch(err){
+        res.status(400).json({message: err.message});
+    }
+}
+
+// DELETE /api/films/:id
+exports.deleteFilm = async (req, res) => {
+    try {
+        const film = await Film.findById(req.params.id);
+
+        if(film == null){
+            return res.status(404).json({message: 'Film not found'});
+        }
+
+        await film.findByIdAndDelete(req.params.id);
+
+        res.json({message: 'Film deleted successfully'});
+    } catch(err){
+        res.status(500).json({message: err.message});
     }
 };
