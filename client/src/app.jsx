@@ -31,7 +31,7 @@ function App() {
       <div className="App">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <Link className="navbar-brand" to="/">      
-            MyWebsite
+            Gazette Films
           </Link>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav mr-auto">

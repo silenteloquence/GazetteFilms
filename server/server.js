@@ -24,6 +24,10 @@ app.use('/api/films', filmRoutes );
 app.use('/api/users', userRoutes );
 
 
+app.use('/api/data', (req, res, next) => {
+    res.status(200).json({message: 'Hello From the Backend'});
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 })
