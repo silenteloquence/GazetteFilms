@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 dotenv.config();
 
 const filmRoutes = require('./routes/film');
+const userRoutes = require('./routes/user');
 
 mongoose.connect('mongodb+srv://GazetteComputingCo:gcc2024c229@cluster0.i9vcrk3.mongodb.net/MovieRecs');
 
@@ -20,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/films', filmRoutes );
+app.use('/api/users', userRoutes );
 
 
 app.listen(PORT, () => {

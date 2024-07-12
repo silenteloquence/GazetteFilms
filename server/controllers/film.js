@@ -90,7 +90,7 @@ exports.deleteFilm = async (req, res) => {
             return res.status(404).json({message: 'Film not found'});
         }
 
-        await film.findByIdAndDelete(req.params.id);
+        await Film.findByIdAndDelete(req.params.id);
 
         res.json({message: 'Film deleted successfully'});
     } catch(err){
