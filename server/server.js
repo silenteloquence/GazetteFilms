@@ -8,7 +8,7 @@ dotenv.config();
 const filmRoutes = require('./routes/film');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://GazetteComputingCo:gcc2024c229@cluster0.i9vcrk3.mongodb.net/MovieRecs');
+mongoose.connect(process.env.MONGODB);
 
 const db = mongoose.connection;
 db.on('error', (error) => console.error(error));
