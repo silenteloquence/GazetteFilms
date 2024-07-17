@@ -1,3 +1,4 @@
+const User = require('../models/user');
 const mongoose = require('mongoose');
 
 const filmSchema = new mongoose.Schema({
@@ -15,6 +16,10 @@ const filmSchema = new mongoose.Schema({
     },
     stars: {
         type: Number,
+        required: true
+    },
+    user: { 
+        type: String,
         required: true
     }
 });

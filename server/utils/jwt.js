@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const secretKey = process.env.JWT_SECRET;
+
 const generateToken = (user) => {
     return jwt.sign(
         {
@@ -16,5 +17,4 @@ const generateToken = (user) => {
         }
     );
 };
-
 module.exports = generateToken;

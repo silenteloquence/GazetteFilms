@@ -1,4 +1,5 @@
 const Film = require('../models/film');
+const Auth = require('../middlewares/auth');
 const express = require('express');
 const router = express.Router();
 
@@ -6,22 +7,24 @@ const router = express.Router();
 // GET /api/films
 exports.getAllFilms = async (req, res) => {
     try {
-        const films = await Film.find();
+        const films = await Film.find({ user: req.user.username });
+        
         res.json(films);
-    } catch(err){
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };
+
+
 
 // GET /api/films/:id
 exports.getFilmById = async (req, res) => {
     try {
         const film = await Film.findById(req.params.id);
-        
-        if(film == null){
-            return res.status(404).json({message: 'Film not found'});
+        //If film is null or not created by this user, return message film not found
+        if(film == null || film.user !== req.user.username){
+            return res.status(403).json({ message: 'Film not found' });
         }
-
         res.json(film);
 
     } catch(err){
@@ -36,6 +39,7 @@ exports.createFilm = async (req, res) => {
         released: req.body.released,
         genre: req.body.genre,
         stars: req.body.stars,
+        user: req.user.username
     });
 
     try {
@@ -52,8 +56,8 @@ exports.updateFilm = async (req, res) => {
     try {
         const film  = await Film.findById(req.params.id);
 
-        if(film == null){
-            return res.status(404).json({message: 'Film not found'});
+        if(film == null || film.user !== req.user.username){
+            return res.status(403).json({ message: 'Film not found' });
         }
 
         if(req.body.name != null){
@@ -86,8 +90,8 @@ exports.deleteFilm = async (req, res) => {
     try {
         const film = await Film.findById(req.params.id);
 
-        if(film == null){
-            return res.status(404).json({message: 'Film not found'});
+        if(film == null || film.user !== req.user.username){
+            return res.status(403).json({ message: 'Film not found' });
         }
 
         await Film.findByIdAndDelete(req.params.id);
@@ -97,3 +101,4 @@ exports.deleteFilm = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 };
+
