@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/home';
 import Register from './pages/register';
 import Login from './pages/login';
+import AddMovie from './pages/AddMovie';
+import MovieList from './pages/MovieList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -46,6 +48,12 @@ function App() {
                     <span className="navbar-text mr-3">Welcome, {user.username}</span>
                   </li>
                   <li className="nav-item">
+                    <Link className="nav-link" to="/add-movie">Add a film</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/movie-list">My films</Link>
+                  </li>
+                  <li className="nav-item">
                     <button className="btn btn-outline-secondary" onClick={handleLogout}>Logout</button>
                   </li>
                 </>
@@ -67,6 +75,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login setUser={setUser} />} />
+            <Route path="/add-movie" element={<AddMovie />} />
+            <Route path="/movie-list" element={<MovieList />} />
           </Routes>
         </div>
         <nav className="navbar fixed-bottom navbar-light bg-light">
