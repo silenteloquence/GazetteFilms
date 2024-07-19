@@ -1,43 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+import React, { useEffect, useState } from 'react';
 
 const MovieList = () => {
-  const [movies, setMovies] = useState([]);
+  const [films, setFilms] = useState([]);
+  const [error, setError] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_URL || '/';
+  const token = localStorage.getItem('token'); //get token from localStorage
 
   useEffect(() => {
-    axios.get('/api/movies')
-      .then(response => {
-        setMovies(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the movies!', error);
-      });
-  }, []);
+    const fetchFilms = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/films/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, //include the token in the Authorization header
+          },
+        });
 
-  const deleteMovie = (id) => {
-    axios.delete(`/api/movies/${id}`)
-      .then(() => {
-        setMovies(movies.filter(movie => movie._id !== id));
-      })
-      .catch(error => {
-        console.error('There was an error deleting the movie!', error);
+        if (!response.ok) {
+          throw new Error("Can't find your films");
+        }
+
+        const result = await response.json();
+        setFilms(result); //set the films data
+      } catch (error) {
+        setError(error.message); //handle error
+        console.error('Fetch error:', error);
+      }
+    };
+
+    fetchFilms();
+  }, [apiUrl, token]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const deleteFilm = async (id) => {
+    try {
+      const response = await fetch(`${apiUrl}/films/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, //innclude the token in the Authorization header
+        },
       });
+
+      if (!response.ok) {
+        throw new Error('Delete movie failed');
+      }
+
+      //remove the film
+      setFilms(films.filter(film => film._id !== id));
+
+    } catch (error) {
+      setError(error.message);
+      console.error('Delete error:', error);
+    }
   };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
       <h1>Movie List</h1>
-      <Link to="/add">Add Movie</Link>
-      <ul>
-        {movies.map(movie => (
-          <li key={movie._id}>
-            {movie.title} - {movie.rating}
-            <Link to={`/update/${movie._id}`}>Edit</Link>
-            <button onClick={() => deleteMovie(movie._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      {films.length > 0 ? (
+        <ul>
+          {films.map((film) => (
+            <li key={film._id}>
+              {film.name}
+              {film.released}
+              {film.genre}
+              {film.stars}
+              <button onClick={() => deleteFilm(film._id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>No films found</div>
+      )}
     </div>
   );
 };

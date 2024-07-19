@@ -25,7 +25,6 @@ const AddMovie = () => {
     const filmData = { ...form, user: username };
 
     try {
-      console.log('API URL:', `${apiUrl}/films/createFilm`); // Debug log
       const response = await fetch(`${apiUrl}/films/`, {
         method: 'POST',
         headers: {
@@ -35,17 +34,7 @@ const AddMovie = () => {
         body: JSON.stringify(filmData),
       });
 
-       // Log response for debugging
-       console.log('Response:', response);
-
        if (!response.ok) {
-         // Log the response status and status text
-         console.error('Response Status:', response.status);
-         console.error('Response Status Text:', response.statusText);
- 
-         const responseData = await response.json();
-         console.error('Response Data:', responseData);
-
         throw new Error('Add movie failed');
       }
       navigate('/');
