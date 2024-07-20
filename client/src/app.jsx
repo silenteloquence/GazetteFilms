@@ -71,7 +71,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login setUser={setUser} />} />
-
             <Route path="/movie-list" element={<MovieList />} />
           </Routes>
         </div>
